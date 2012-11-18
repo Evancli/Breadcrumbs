@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">Breadcrumbs</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Breadcrumbs</string>
+	<string name="preferences_title">Settings</string>
+
+    <string name="preference_settings_title">App Settings</string>
+    <string name="preference_info_title">App Information</string>
+</resources>
