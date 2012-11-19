@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Used in preferences for background color -->
+    <string-array name="preference_background_color_entries_list">
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Orange</item>  
+        <item>Purple</item>    
+    </string-array>
+    
+    <string-array name="preference_background_color_entryvalues_list">
+        <item>blue</item>
+        <item>red</item>
+        <item>green</item>
+        <item>orange</item>  
+        <item>purple</item>    
+    </string-array>
+    
+    <!-- Used in preferences for range -->
+    <string-array name="preference_range_entries_list">
+        <item>10 Meters</item>
+        <item>50 Meters</item>
+        <item>100 Meters</item>
+        <item>200 Meters</item>    
+    </string-array>
+    
+    <string-array name="preference_range_entryvalues_list">
+        <item>10</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>    
+    </string-array>
+    
+  
+</resources>

@@ -8,4 +8,10 @@
 
     <string name="preference_settings_title">App Settings</string>
     <string name="preference_info_title">App Information</string>
+    
+    <string name="preference_background_color_title">Background Color</string>
+    <string name="preference_background_color_dialog_title">Choose a color</string>
+    
+    <string name="preference_range_title">Search Range</string>
+    <string name="preference_range_dialog_title">Choose a distance</string>
 </resources>
