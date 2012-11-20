@@ -44,6 +44,17 @@ public final class R {
         public static final int preference_background_color_dialog_title=0x7f060008;
         public static final int preference_background_color_title=0x7f060007;
         public static final int preference_info_title=0x7f060006;
+        public static final int preference_message_1_lat_info=0x7f060011;
+        public static final int preference_message_1_lat_title=0x7f060010;
+        public static final int preference_message_1_long_info=0x7f060013;
+        public static final int preference_message_1_long_title=0x7f060012;
+        public static final int preference_message_1_message_info=0x7f060015;
+        public static final int preference_message_1_message_title=0x7f060014;
+        public static final int preference_message_1_title=0x7f06000d;
+        public static final int preference_message_2_title=0x7f06000e;
+        public static final int preference_message_3_title=0x7f06000f;
+        public static final int preference_password_info=0x7f06000c;
+        public static final int preference_password_title=0x7f06000b;
         public static final int preference_range_dialog_title=0x7f06000a;
         public static final int preference_range_title=0x7f060009;
         public static final int preference_settings_title=0x7f060005;

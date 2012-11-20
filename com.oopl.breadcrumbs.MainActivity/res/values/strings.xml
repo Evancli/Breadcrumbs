@@ -14,4 +14,18 @@
     
     <string name="preference_range_title">Search Range</string>
     <string name="preference_range_dialog_title">Choose a distance</string>
+    
+    <string name="preference_password_title">Password</string>
+    <string name="preference_password_info">Enter a password to protect settings.</string>
+    
+    <string name="preference_message_1_title">Message 1</string>
+    <string name="preference_message_2_title">Message 2</string>
+    <string name="preference_message_3_title">Message 3</string>
+    
+    <string name="preference_message_1_lat_title">Latitude</string>
+    <string name="preference_message_1_lat_info">90N is 90, 90S is -90.</string>
+    <string name="preference_message_1_long_title">Longitude</string>
+    <string name="preference_message_1_long_info">180E is 180, 180W is -180.</string>
+    <string name="preference_message_1_message_title">Message</string>
+    <string name="preference_message_1_message_info">Message to be displayed.</string>
 </resources>

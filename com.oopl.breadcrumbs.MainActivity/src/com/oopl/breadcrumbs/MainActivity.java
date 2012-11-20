@@ -1,5 +1,7 @@
 package com.oopl.breadcrumbs;
 
+import java.util.ArrayList;
+
 import com.oopl.breadcrumbs.R;
 import com.oopl.breadcrumbs.SettingsActivity;
 
@@ -21,19 +23,25 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnSharedPreferenceChangeListener {
+public class MainActivity extends Activity implements
+		OnSharedPreferenceChangeListener {
 	private ActionBar bar;
 	private View view;
 	private SharedPreferences prefs;
 	private LocationManager locationManager;
 	private LocationProvider provider;
-	
+	private ArrayList<MessageData> messages = new ArrayList<MessageData>();
+
 	private AnimationView animationView;
 	private RelativeLayout containerView;
 	private TextView messageView;
@@ -41,25 +49,26 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		bar = getActionBar();
 		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-		
+
 		view = this.getWindow().getDecorView();
-		
+
 		setContentView(R.layout.activity_main);
-		
+
 		containerView = (RelativeLayout) this.findViewById(R.id.containerView);
 		messageView = (TextView) this.findViewById(R.id.messageView);
 		messageView.setVisibility(View.INVISIBLE);
+		//messageView.setAlpha(0f);
 		animationView = new AnimationView(this);
 		containerView.addView(animationView);
-		
-		//Get preferences
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
-        // register preference change listener
-        prefs.registerOnSharedPreferenceChangeListener(this);
+
+		// Get preferences
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+		// register preference change listener
+		prefs.registerOnSharedPreferenceChangeListener(this);
 
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
@@ -94,7 +103,7 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -103,26 +112,75 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 		setActivityBackgroundColor(prefs.getString("pref_bgcolor", "blue"));
+		getMessagePositions();
+		
+		startLocationSearch();
 	}
 
+
+	
 	/*
 	 * Location settings.
 	 */
 	private void enableLocationSettings() {
+
 		Intent settingsIntent = new Intent(
 				Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		startActivity(settingsIntent);
+
 	}
 
 	/*
 	 * Switch to setting activity.
 	 */
 	public void callSettings(View view) {
-		//Intent settingIntent = new Intent(this, SettingsActivity.class);
-		//startActivity(settingIntent);
-		animationView.onPlay();
+		
+		final String pass = prefs.getString("pref_password", null);
+		// Log.d("MA", pass);
+		final Intent settingIntent = new Intent(this, SettingsActivity.class);
+
+		if (pass == null || pass.contentEquals("")) {
+
+			startActivity(settingIntent);
+
+		} else {
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Password Protected");
+			alert.setMessage("Enter Password:");
+
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							String value = input.getText().toString();
+							// Log.d("MA", "Pin Value : " + value);
+							if (value.contentEquals(pass)) {
+								startActivity(settingIntent);
+							}
+							return;
+						}
+					});
+
+			alert.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							return;
+						}
+					});
+			alert.show();
+		}
+
+		
+		
+		 
+		//fadeInText("Test");
 	}
 
 	/*
@@ -138,7 +196,7 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 	}
 
 	/*
-	 *  Check Location Services Active
+	 * Check Location Services Active
 	 */
 	public boolean checkLocationAvailibility() {
 		final boolean gpsEnabled = locationManager
@@ -170,6 +228,41 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 	}
 
 	/*
+	 * get message data from settings
+	 */
+	public void getMessagePositions() {
+		messages.clear();
+
+		String lat1 = prefs.getString("pref_mess_1_lat", null);
+		String long1 = prefs.getString("pref_mess_1_long", null);
+		String mess1 = prefs.getString("pref_mess_1_mess", null);
+
+		if (lat1 != null && long1 != null && mess1 != null) {
+			messages.add(new MessageData(Double.parseDouble(lat1), Double
+					.parseDouble(long1), mess1, 1));
+		}
+
+		String lat2 = prefs.getString("pref_mess_2_lat", null);
+		String long2 = prefs.getString("pref_mess_2_long", null);
+		String mess2 = prefs.getString("pref_mess_2_mess", null);
+
+		if (lat2 != null && long2 != null && mess2 != null) {
+			messages.add(new MessageData(Double.parseDouble(lat2), Double
+					.parseDouble(long2), mess2, 2));
+		}
+
+		String lat3 = prefs.getString("pref_mess_3_lat", null);
+		String long3 = prefs.getString("pref_mess_3_long", null);
+		String mess3 = prefs.getString("pref_mess_3_mess", null);
+
+		if (lat3 != null && long3 != null && mess3 != null) {
+			messages.add(new MessageData(Double.parseDouble(lat3), Double
+					.parseDouble(long3), mess3, 3));
+		}
+
+	}
+
+	/*
 	 * Sets background color based on preferences.
 	 */
 	public void setActivityBackgroundColor(String colorStr) {
@@ -194,42 +287,65 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 			color1 = Color.parseColor("#33B5E5");
 			color2 = Color.parseColor("#0099CC");
 		}
-	
-		
-	    bar.setBackgroundDrawable(new ColorDrawable(color1));
 
-	    view.setBackgroundColor(color1);
-	    
+		bar.setBackgroundDrawable(new ColorDrawable(color1));
+
+		view.setBackgroundColor(color1);
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see android.content.SharedPreferences.OnSharedPreferenceChangeListener#onSharedPreferenceChanged(android.content.SharedPreferences, java.lang.String)
+	 * 
+	 * @see android.content.SharedPreferences.OnSharedPreferenceChangeListener#
+	 * onSharedPreferenceChanged(android.content.SharedPreferences,
+	 * java.lang.String)
 	 */
 	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
 	/*
 	 * Ping Animation Start
 	 */
 	public void startAnimation() {
-		
+
 	}
-	
+
 	/*
-	 *  Ping Animation End
+	 * Ping Animation End
 	 */
 	public void stopAnimation() {
-		
+
 	}
-	
+
+	/*
+	 * Fade In text
+	 */
+	public void fadeInText(String text) {
+		AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+		fadeIn.setDuration(1200);
+		fadeIn.setFillAfter(true);
+		messageView.setText(text);
+		messageView.setVisibility(View.VISIBLE);
+		messageView.startAnimation(fadeIn);
+	}
+
+	/*
+	 * Fade Out Text
+	 */
+	public void fadeOutText() {
+		AlphaAnimation fadeOut = new AlphaAnimation( 1.0f , 0.0f ) ; 
+	     fadeOut.setDuration(1200);
+	    fadeOut.setFillAfter(true);
+	    messageView.setText("");
+	    messageView.startAnimation(fadeOut);
+	}
+
 	/*
 	 * Location Listener
 	 */
-
 	private final LocationListener listener = new LocationListener() {
 
 		public void onLocationChanged(Location location) {
@@ -239,7 +355,32 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 			// with the new
 			// location.
 
-			//locationManager.removeUpdates(this);
+			animationView.play();
+			
+			float range = Float.parseFloat(prefs.getString("pref_range", "10"));
+			double lat = location.getLatitude();
+			double lon = location.getLongitude();
+
+			float[] results = new float[3];
+
+			for (int i = 0; i < messages.size(); i++) {
+				MessageData data = messages.get(i);
+				
+				
+				
+
+				Location.distanceBetween(lat, lon, data.latitude,
+						data.longitude, results);
+				
+				Log.d("MA", "lat:"+lat + " long:"+ lon + " pos lat:"+ data.latitude + " pos long:" + data.longitude + " distance:"+results[0]+" range:"+range);
+				
+				if (results[0] <= range) {
+					Log.d("MA", "MEssage fire");
+					fadeInText(data.message);
+				}
+			}
+
+			// locationManager.removeUpdates(this);
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -258,5 +399,4 @@ public class MainActivity extends Activity implements OnSharedPreferenceChangeLi
 		}
 	};
 
-	
 }

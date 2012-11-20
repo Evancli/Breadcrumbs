@@ -3,14 +3,20 @@
     android:id="@+id/containerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+    
     <TextView
         android:id="@+id/messageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/hello_world"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Hello"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:textStyle="bold"
         tools:context=".MainActivity" />
+
+    
 
 </RelativeLayout>

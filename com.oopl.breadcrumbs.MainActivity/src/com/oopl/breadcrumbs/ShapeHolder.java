@@ -84,6 +84,7 @@ public class ShapeHolder {
     public void setWidth(float width) {
         Shape s = shape.getShape();
         s.resize(width, s.getHeight());
+        //x = x - width/2;
     }
 
     public float getHeight() {
@@ -92,6 +93,7 @@ public class ShapeHolder {
     public void setHeight(float height) {
         Shape s = shape.getShape();
         s.resize(s.getWidth(), height);
+        //y = y - height/2;
     }
 
     public ShapeHolder(ShapeDrawable s) {
